@@ -70,7 +70,7 @@ def train_net(net,
     # GradScaler 防止在反向传播过程由于中梯度太小（float16无法表示小幅值的变化）从而下溢为0的情况
     grad_scaler = torch.cuda.amp.GradScaler(enabled=amp)
     # criterion = nn.CrossEntropyLoss()
-    criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor([100, 1], dtype=torch.float)).to(device=device)
+    criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor([1, 100], dtype=torch.float)).to(device=device)
 
     # 5. Begin training
     for epoch in range(1, epochs + 1):
