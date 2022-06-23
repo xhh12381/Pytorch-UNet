@@ -34,7 +34,7 @@ class BasicDataset(Dataset):
         newW, newH = 512, 512
         assert newW > 0 and newH > 0, 'Scale is too small, resized images would have no pixel'
         pil_img = pil_img.resize((newW, newH), resample=Image.NEAREST if is_mask else Image.BICUBIC)
-        img_ndarray = np.asarray(pil_img)  # PIL Image -> ndarray(h,w,c)或(h,w)
+        img_ndarray = np.asarray(pil_img).astype(int)  # PIL Image -> ndarray(h,w,c)或(h,w)
 
         if not is_mask:
             if img_ndarray.ndim == 2:
