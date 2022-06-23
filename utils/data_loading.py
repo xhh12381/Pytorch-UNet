@@ -43,8 +43,9 @@ class BasicDataset(Dataset):
             else:
                 # (h,w,c)->(c,h,w)
                 img_ndarray = img_ndarray.transpose((2, 0, 1))
+            img_ndarray = img_ndarray / 255  # 归一化
 
-        img_ndarray = np.ceil(img_ndarray / 255)
+        # img_ndarray = np.ceil(img_ndarray / 255)
 
         return img_ndarray
 
@@ -65,7 +66,7 @@ class BasicDataset(Dataset):
 
         assert len(img_file) == 1, f'Either no image or multiple images found for the ID {name}: {img_file}'
         assert len(mask_file) == 1, f'Either no mask or multiple masks found for the ID {name}: {mask_file}'
-        mask = self.load(mask_file[0]).convert('L')
+        mask = self.load(mask_file[0]).convert('1')
         img = self.load(img_file[0]).convert('RGB')
 
         assert img.size == mask.size, \
