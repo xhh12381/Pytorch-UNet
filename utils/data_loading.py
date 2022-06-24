@@ -31,7 +31,7 @@ class BasicDataset(Dataset):
         # pil_image -> image:返回(c,h,w)并归一化, mask:返回(h,w,c)
         w, h = pil_img.size
         # newW, newH = int(scale * w), int(scale * h)
-        newW, newH = 512, 512
+        newW, newH = 512, 256
         assert newW > 0 and newH > 0, 'Scale is too small, resized images would have no pixel'
         pil_img = pil_img.resize((newW, newH), resample=Image.NEAREST if is_mask else Image.BICUBIC)
         img_ndarray = np.asarray(pil_img).astype(int)  # PIL Image -> ndarray(h,w,c)或(h,w)
