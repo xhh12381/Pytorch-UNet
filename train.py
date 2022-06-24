@@ -15,8 +15,8 @@ from unet import UNet
 from utils.data_loading import BasicDataset, CarvanaDataset
 from utils.dice_score import dice_loss
 
-dir_img = '/kaggle/input/tiles-dataset/imgs/'
-dir_mask = '/kaggle/input/tiles-dataset/masks/'
+dir_img = '/kaggle/input/aitex-dataset/imgs/'
+dir_mask = '/kaggle/input/aitex-dataset/masks/'
 dir_checkpoint = Path('./checkpoints/')
 
 
