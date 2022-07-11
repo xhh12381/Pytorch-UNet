@@ -69,8 +69,7 @@ def train_net(net,
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=2)  # goal: maximize Dice score
     # GradScaler 防止在反向传播过程由于中梯度太小（float16无法表示小幅值的变化）从而下溢为0的情况
     grad_scaler = torch.cuda.amp.GradScaler(enabled=amp)
-    # criterion = nn.CrossEntropyLoss()
-    criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor([1, 100], dtype=torch.float)).to(device=device)
+    criterion = nn.CrossEntropyLoss()
 
     # 5. Begin training
     for epoch in range(1, epochs + 1):
@@ -94,11 +93,10 @@ def train_net(net,
                     # CrossEntropyLoss():输入masks_pred的维度为(B,C,H,W),对应true_masks的维度为(B,H,W),且true_masks中的值在[0,C-1]之间
                     # F.one_hot():(B,H,W)->(B,H,W,C)
                     # C = num_classes
-                    # loss = criterion(masks_pred, true_masks) \
-                    #        + dice_loss(F.softmax(masks_pred, dim=1).float(),
-                    #                    F.one_hot(true_masks, net.n_classes).permute(0, 3, 1, 2).float(),
-                    #                    multiclass=True)
-                    loss = criterion(masks_pred, true_masks)
+                    loss = criterion(masks_pred, true_masks) \
+                           + dice_loss(F.softmax(masks_pred, dim=1).float(),
+                                       F.one_hot(true_masks, net.n_classes).permute(0, 3, 1, 2).float(),
+                                       multiclass=True)
 
                 optimizer.zero_grad(set_to_none=True)
                 grad_scaler.scale(loss).backward()
@@ -150,7 +148,7 @@ def train_net(net,
 def get_args():
     parser = argparse.ArgumentParser(description='Train the UNet on images and target masks')
     parser.add_argument('--epochs', '-e', metavar='E', type=int, default=100, help='Number of epochs')
-    parser.add_argument('--batch-size', '-b', dest='batch_size', metavar='B', type=int, default=4, help='Batch size')
+    parser.add_argument('--batch-size', '-b', dest='batch_size', metavar='B', type=int, default=8, help='Batch size')
     parser.add_argument('--learning-rate', '-l', metavar='LR', type=float, default=1e-4,
                         help='Learning rate', dest='lr')
     parser.add_argument('--load', '-f', type=str, default=False, help='Load model from a .pth file')
