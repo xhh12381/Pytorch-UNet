@@ -34,7 +34,7 @@ def train_net(net,
     #     dataset = CarvanaDataset(dir_img, dir_mask, img_scale)
     # except (AssertionError, RuntimeError):
     #     dataset = BasicDataset(dir_img, dir_mask, img_scale)
-    dataset = BasicDataset(dir_img, dir_mask, img_scale)
+    dataset = BasicDataset(dir_img, dir_mask, img_scale, mask_suffix='_label')
 
     # 2. Split into train / validation partitions
     n_val = int(len(dataset) * val_percent)
